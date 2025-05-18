@@ -8,7 +8,6 @@ pipeline {
         }
 
 
-
         stage('code build')
         {
             steps {
