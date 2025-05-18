@@ -8,12 +8,13 @@ pipeline {
         }
 
 
+
         stage('code build')
         {
             steps {
                 withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
                     sh 'mvn package' // validate + compile + test + package
-                }
+                } 
             }
         }
     }
