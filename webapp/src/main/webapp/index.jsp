@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<Html>    
+<Html lang="en">    
 <Head>  
 <title>  
 Example of Header-levels  
