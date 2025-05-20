@@ -3,10 +3,9 @@ pipeline {
     stages {
         stage('scm checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/rajat1746/maven-project.git'
+                git branch: 'master', url: 'https://github.com/kumargaurav039/maven-project.git'
             }
         }
-
         stage('code validate')
         {
             steps {
@@ -19,7 +18,7 @@ pipeline {
         {
             steps {
                 withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
-                    sh 'mvn compile' // compile 
+                    sh 'mvn compile' // compile
                 }
             }
         }
@@ -27,7 +26,7 @@ pipeline {
         {
             steps {
                 withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
-                    sh 'mvn test' // test 
+                    sh 'mvn test' // test
                 }
             }
         }
@@ -35,29 +34,11 @@ pipeline {
         {
             steps {
                 withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
-                    sh 'mvn package' // validate + compile + test + package
+                    withSonarQubeEnv(credentialsId: 'sonar', installationName: 'sonar') {
+                        sh 'mvn package sonar:sonar'
+                    }
                 }
             }
         }
-
-        stage('code deploy')  // will deploy on target machine
-        {
-            steps { 
-                
-                sshagent(['DEVCICD']) {
-                    sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war ec2-user@172.31.11.76:/usr/local/tomcat/webapps/webapp.war'
-                }
-            
-
-
-                }
-            }
-        }
-
-
     }
-
-
-
-
-
+}
