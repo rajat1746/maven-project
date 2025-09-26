@@ -7,11 +7,18 @@ pipeline {
       }
     }
 
-    stage('code build') //validate then compile
+    stage('code build') 
     {
       steps {
         withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
           sh 'mvn package'
+        }
+      }
+    }
+       stage('code deploy') 
+    {
+      steps {
+       sh 'scp webapp/target/webapp.war ec2-user@172.31.38.208:/user/share/tomact/webapps'
         }
       }
     }
