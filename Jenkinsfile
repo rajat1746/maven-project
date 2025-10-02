@@ -7,7 +7,7 @@ pipeline {
       }
     }
 
-    stage('code build') 
+    stage('code build')
     {
       steps {
         withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
@@ -15,15 +15,19 @@ pipeline {
         }
       }
     }
-       stage('code deploy') 
-    {
+
+    stage('create docker image') {
+      step {
+        sh 'docker build -t rajatksingh/ethans954:v1.0'
+      }
+    }
+
+    stage('push docker image to dockerhub') {
       steps {
-      sshagent(['DEVCICD']){
-       sh 'scp -o StrictHostKeyChecking=no webapp/target/webapp.war ec2-user@172.31.38.208:/opt/tomcat/webapps'
+        withDockerRegistry(credentialsId: 'DockerHubCredentials', url: 'rajatksingh/ethans954') {
+          sh 'docker push rajatksingh/ethans954:v1.0 '
         }
       }
-      }
     }
-    }
-  
-
+  }
+}
