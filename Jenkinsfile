@@ -1,31 +1,31 @@
 pipeline {
   agent any
+
   stages {
-    stage('scm checkout') {
+    stage('SCM Checkout') {
       steps {
         git branch: 'master', url: 'https://github.com/rajat1746/maven-project.git'
       }
     }
 
-    stage('code build')
-    {
+    stage('Build with Maven') {
       steps {
-        withMaven(globalMavenSettingsConfig: '', jdk: 'JAVA_HOME', maven: 'MAVEN_HOME', mavenSettingsConfig: '', traceability: true) {
-          sh 'mvn package'
+        withMaven(jdk: 'JDK11', maven: 'M3') {
+          sh 'mvn clean package'
         }
       }
     }
 
-    stage('create docker image') {
-      step {
-        sh 'docker build -t rajatksingh/ethans954:v1.0'
+    stage('Create Docker Image') {
+      steps {
+        sh 'docker build -t rajatksingh/ethans954:v1.0 .'
       }
     }
 
-    stage('push docker image to dockerhub') {
+    stage('Push Docker Image to DockerHub') {
       steps {
-        withDockerRegistry(credentialsId: 'DockerHubCredentials', url: 'rajatksingh/ethans954') {
-          sh 'docker push rajatksingh/ethans954:v1.0 '
+        withDockerRegistry(credentialsId: 'DockerHubCredentials', url: 'https://index.docker.io/v1/') {
+          sh 'docker push rajatksingh/ethans954:v1.0'
         }
       }
     }
