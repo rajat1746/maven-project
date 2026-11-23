@@ -16,18 +16,18 @@ pipeline {
       }
     }
 
-    stage('Create Docker Image') {
-      steps {
-        sh 'docker build -t rajatksingh/ethans954:v1.0 .'
-      }
-    }
+    // stage('Create Docker Image') {  
+    //   steps {
+    //     sh 'docker build -t rajatksingh/ethans954:v1.0 .'
+    //   }
+    // }
 
-    stage('Push Docker Image to DockerHub') {
-      steps {
-        withDockerRegistry(credentialsId: 'DockerHubCredentials', url: 'https://index.docker.io/v1/') {
-          sh 'docker push rajatksingh/ethans954:v1.0'
-        }
-      }
-    }
+    // stage('Push Docker Image to DockerHub') {
+    //   steps {
+    //     withDockerRegistry(credentialsId: 'DockerHubCredentials', url: 'https://index.docker.io/v1/') {
+    //       sh 'docker push rajatksingh/ethans954:v1.0'
+    //     }
+    //   }
+    // }
   }
 }
