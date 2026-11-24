@@ -15,6 +15,23 @@ pipeline {
         }
       }
     }
+
+    stage('Deploy code on Tomcat') {
+    steps {
+        sh '''
+            echo "Checking WAR file..."
+            ls -lh webapp/target/webapp.war
+
+            echo "Copying WAR to Tomcat..."
+            cp webapp/target/webapp.war /opt/tomcat/webapps/
+
+            echo "Checking deployment..."
+            ls -lh /opt/tomcat/webapps/webapp.war
+        '''
+    }
+}
+
+
     
 
     // stage('Create Docker Image') {  
